@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewUSer(t *testing.T) {
+func TestUser(t *testing.T) {
 	user, err := NewUser("Felipe Dias", "felipe@gmail.com", "123456")
 	assert.Nil(t, err)
 	assert.NotNil(t, user)
