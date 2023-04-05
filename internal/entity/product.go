@@ -29,12 +29,10 @@ func NewProduct(name string, price int) (*Product, error) {
 		Price:     price,
 		CreatedAt: time.Now(),
 	}
-
 	err := product.Validate()
 	if err != nil {
 		return nil, err
 	}
-
 	return product, nil
 }
 
