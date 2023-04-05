@@ -2,6 +2,7 @@ package entity
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/felipedias-dev/fullcycle-go-expert-basic-api/pkg/entity"
@@ -37,6 +38,7 @@ func NewProduct(name string, price int) (*Product, error) {
 }
 
 func (p *Product) Validate() error {
+	fmt.Println("Price:", p.Price)
 	if p.ID.String() == "" {
 		return ErrIDIsRequired
 	}
