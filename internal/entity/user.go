@@ -17,7 +17,6 @@ func NewUser(name, email, password string) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return &User{
 		ID:       entity.NewID(),
 		Name:     name,

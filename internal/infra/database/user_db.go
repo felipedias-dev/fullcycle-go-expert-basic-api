@@ -15,12 +15,10 @@ func (u *User) Create(user *entity.User) error {
 
 func (u *User) FindByEmail(email string) (*entity.User, error) {
 	var user entity.User
-
 	err := u.DB.Where("email = ?", email).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
-
 	return &user, nil
 }
 
