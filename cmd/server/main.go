@@ -7,6 +7,8 @@ import (
 	"github.com/felipedias-dev/fullcycle-go-expert-basic-api/internal/entity"
 	"github.com/felipedias-dev/fullcycle-go-expert-basic-api/internal/infra/database"
 	"github.com/felipedias-dev/fullcycle-go-expert-basic-api/internal/infra/webserver/handlers"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -22,8 +24,14 @@ func main() {
 	}
 	db.AutoMigrate(&entity.Product{}, &entity.User{})
 
-	productHandler := handlers.NewProductHandler(database.NewProduct(db))
-	http.HandleFunc("/products", productHandler.CreateProduct)
+	productDB := database.NewProduct(db)
+	productHandler := handlers.NewProductHandler(productDB)
 
-	http.ListenAndServe(":8000", nil)
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+	r.Post("/products", productHandler.CreateProduct)
+	r.Get("/products/{id}", productHandler.GetProduct)
+	r.Put("/products/{id}", productHandler.UpdateProduct)
+
+	http.ListenAndServe(":8000", r)
 }
