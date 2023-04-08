@@ -27,6 +27,9 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+	r.Use(middleware.WithValue("jwt", config.TokenAuthKey))
+	r.Use(middleware.WithValue("jwtExpiration", config.JWTExpiration))
 
 	productDB := database.NewProduct(db)
 	productHandler := handlers.NewProductHandler(productDB)
@@ -42,7 +45,7 @@ func main() {
 	})
 
 	userDB := database.NewUser(db)
-	userHandler := handlers.NewUserHandler(userDB, config.TokenAuthKey, config.JWTExpiration)
+	userHandler := handlers.NewUserHandler(userDB)
 
 	r.Post("/users", userHandler.CreateUser)
 	r.Post("/users/auth", userHandler.GetJWTHandler)

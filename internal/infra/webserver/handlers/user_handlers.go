@@ -12,20 +12,18 @@ import (
 )
 
 type UserHandler struct {
-	UserDB        database.UserInterface
-	Jwt           *jwtauth.JWTAuth
-	JwtExpiration int
+	UserDB database.UserInterface
 }
 
-func NewUserHandler(db database.UserInterface, jwt *jwtauth.JWTAuth, jwtExpiration int) *UserHandler {
+func NewUserHandler(db database.UserInterface) *UserHandler {
 	return &UserHandler{
-		UserDB:        db,
-		Jwt:           jwt,
-		JwtExpiration: jwtExpiration,
+		UserDB: db,
 	}
 }
 
 func (h *UserHandler) GetJWTHandler(w http.ResponseWriter, r *http.Request) {
+	jwt := r.Context().Value("jwt").(*jwtauth.JWTAuth)
+	jwtExpiration := r.Context().Value("jwtExpiration").(int)
 	var input dto.GetJWTInput
 	err := json.NewDecoder(r.Body).Decode(&input)
 	if err != nil {
@@ -41,7 +39,7 @@ func (h *UserHandler) GetJWTHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-	token, err := pkgEntity.GenerateJWT(user.ID.String(), h.Jwt, h.JwtExpiration)
+	token, err := pkgEntity.GenerateJWT(user.ID.String(), jwt, jwtExpiration)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
