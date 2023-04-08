@@ -1,0 +1,18 @@
+basePath: /
+host: localhost:8000
+info:
+  contact: {}
+  description: Product API with Authentication
+  license:
+    name: MIT
+    url: https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt
+  termsOfService: http://swagger.io/terms/
+  title: Full Cycle Go Expert Basic API
+  version: 1.0.0
+paths: {}
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
